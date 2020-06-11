@@ -11,5 +11,5 @@
     <root level="error">
         <appender-ref ref="STDOUT"/>
     </root>
-    <logger name="io.github.davidmerrick.partymode" level="DEBUG"/>
+    <logger name="io.github.davidmerrick.strava" level="DEBUG"/>
 </configuration>

@@ -8,9 +8,6 @@ endpoints:
   health:
     enabled: true
 
-slack:
-  token:
-
 logger:
   levels:
     io.github.davidmerrick.strava-bigquery: DEBUG

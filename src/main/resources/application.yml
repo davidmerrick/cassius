@@ -16,9 +16,6 @@ jackson:
   deserialization:
     failOnUnknownProperties: false
 
-slack:
-  token:
-
 logger:
   levels:
     io.github.davidmerrick.strava: DEBUG
