@@ -1,6 +1,6 @@
 micronaut:
   application:
-    name: strava-bigquery
+    name: strava
 
 endpoints:
   all:
@@ -10,4 +10,4 @@ endpoints:
 
 logger:
   levels:
-    io.github.davidmerrick.strava-bigquery: DEBUG
+    io.github.davidmerrick.strava: DEBUG
