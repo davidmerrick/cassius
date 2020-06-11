@@ -1,0 +1,13 @@
+micronaut:
+  application:
+    name: strava-bigquery
+
+endpoints:
+  all:
+    enabled: false
+  health:
+    enabled: true
+
+logger:
+  levels:
+    io.github.davidmerrick.strava-bigquery: DEBUG

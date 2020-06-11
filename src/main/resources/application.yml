@@ -1,0 +1,21 @@
+micronaut:
+  application:
+    name: strava
+
+endpoints:
+  all:
+    enabled: false
+  health:
+    enabled: true
+
+jackson:
+  mapper:
+    ACCEPT_CASE_INSENSITIVE_ENUMS: true
+  bean-introspection-module: true
+  serializationInclusion: NON_NULL
+  deserialization:
+    failOnUnknownProperties: false
+
+logger:
+  levels:
+    io.github.davidmerrick.strava: DEBUG
