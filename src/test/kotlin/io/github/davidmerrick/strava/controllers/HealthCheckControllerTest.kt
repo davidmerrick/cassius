@@ -18,5 +18,6 @@ class HealthCheckControllerTest {
     fun `Health check endpoint should be enabled`() {
         val response = client.toBlocking().retrieve("/health")
         response.contains("status") shouldBe true
+        response.contains("UP") shouldBe true
     }
 }

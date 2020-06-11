@@ -28,7 +28,7 @@ allOpen {
 }
 
 dependencies {
-    val micronautVersion by extra("1.3.4")
+    val micronautVersion by extra("1.3.6")
 
     kapt(platform("io.micronaut:micronaut-bom:$micronautVersion"))
     kapt("io.micronaut:micronaut-inject-java")

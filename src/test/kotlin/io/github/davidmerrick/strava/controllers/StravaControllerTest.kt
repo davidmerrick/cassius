@@ -9,6 +9,8 @@ import io.micronaut.test.annotation.MicronautTest
 import org.junit.jupiter.api.Test
 import javax.inject.Inject
 
+private const val EVENTS_ENDPOINT = "/strava/events"
+
 @MicronautTest(application = TestApplication::class)
 class StravaControllerTest {
     @Inject
@@ -17,9 +19,21 @@ class StravaControllerTest {
 
     @Test
     fun `Strava activities endpoint stubbed out`() {
-        val request = HttpRequest.POST("/strava/activities", "banana")
+        val request = HttpRequest.POST(EVENTS_ENDPOINT, "banana")
 
         val response = client.toBlocking().retrieve(request)
         response.contains("hello world") shouldBe true
+    }
+
+    @Test
+    fun `Strava challenge endpoint should return challenge`() {
+        val request = HttpRequest.GET<String>(EVENTS_ENDPOINT)
+        request.parameters.add(HUB_MODE, "foo")
+        request.parameters.add(HUB_CHALLENGE, "bar")
+        request.parameters.add(HUB_VERIFY_TOKEN, "baz")
+
+        val response = client.toBlocking().retrieve(request)
+        response.contains("hub.challenge") shouldBe true
+        response.contains("bar") shouldBe true
     }
 }
