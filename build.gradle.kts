@@ -44,6 +44,7 @@ dependencies {
     implementation("io.micronaut:micronaut-http-server-netty")
     implementation("io.micronaut:micronaut-management")
     implementation("io.micronaut:micronaut-http-client")
+    implementation("com.google.cloud:google-cloud-storage:1.108.0")
 
     // Test
 

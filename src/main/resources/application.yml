@@ -3,10 +3,12 @@ micronaut:
     name: strava
 
 strava:
-  challenge:
-    verifyToken:
+  challengeVerifyToken:
   client:
     refreshToken:
+
+gcp:
+  bucketName:
 
 endpoints:
   all:
