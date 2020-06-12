@@ -1,12 +1,10 @@
-micronaut:
-  application:
-    name: strava
+strava:
+  challengeVerifyToken: banana
+  client:
+    refreshToken:
 
-endpoints:
-  all:
-    enabled: false
-  health:
-    enabled: true
+gcp:
+  bucketName: banana
 
 logger:
   levels:
