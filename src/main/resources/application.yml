@@ -2,6 +2,12 @@ micronaut:
   application:
     name: strava
 
+strava:
+  challenge:
+    verifyToken:
+  client:
+    refreshToken:
+
 endpoints:
   all:
     enabled: false
