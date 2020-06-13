@@ -7,18 +7,20 @@ import io.micronaut.http.HttpHeaders
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.client.HttpClient
 import io.micronaut.http.client.annotation.Client
+import io.micronaut.http.exceptions.HttpException
+import io.micronaut.http.server.exceptions.HttpServerException
 import mu.KotlinLogging
 import javax.inject.Singleton
 
-private const val STRAVA_HOST = "https://www.strava.com"
-private const val ACTIVITY_ENDPOINT = "/v3/activities"
+private const val STRAVA_BASE_URL = "https://www.strava.com/api/v3"
+private const val ACTIVITY_ENDPOINT = "/activities"
 private const val AUTH_ENDPOINT = "/oauth/token"
 
 private val log = KotlinLogging.logger {}
 
 @Singleton
 class StravaClient(
-        @Client(STRAVA_HOST) private val client: HttpClient,
+        @Client(STRAVA_BASE_URL) private val client: HttpClient,
         private val config: StravaConfig
 ) {
 
@@ -30,7 +32,12 @@ class StravaClient(
         val request = HttpRequest
                 .GET<String>("$ACTIVITY_ENDPOINT/$actividyId")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer ${token.accessToken}")
-        return client.toBlocking().retrieve(request)
+        return try {
+            client.toBlocking().retrieve(request)
+        } catch (e: HttpException) {
+            log.error("Failed to fetch activity from Strava", e)
+            throw HttpServerException("Failed to retrieve activity")
+        }
     }
 
     /**
@@ -39,7 +46,7 @@ class StravaClient(
      * Future: Caffeine cache backed by Firestore.
      */
     private fun getAccessToken(): StravaToken {
-        log.info("Fetching Strava access token")
+        log.info("Retrieving Strava access token")
 
         val request = HttpRequest
                 .POST(AUTH_ENDPOINT, "")
@@ -49,7 +56,13 @@ class StravaClient(
         request.parameters.add("grant_type", "refresh_token")
         request.parameters.add("refresh_token", config.refreshToken)
 
-        return client.toBlocking().retrieve(request, StravaToken::class.java)
+        return try {
+            client.toBlocking()
+                    .retrieve(request, StravaToken::class.java)
+        } catch (e: HttpException) {
+            log.error("Strava auth call failed", e)
+            throw HttpServerException("Failed to authenticate with Strava")
+        }
     }
 }
 
@@ -57,6 +70,6 @@ class StravaClient(
 data class StravaToken(
         @JsonProperty("access_token")
         val accessToken: String,
-        @JsonProperty("expires_in")
-        val expiresIn: Long
+        @JsonProperty("expires_at")
+        val expiresAt: Long
 )
