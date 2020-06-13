@@ -7,7 +7,9 @@ import io.github.davidmerrick.cassius.config.StravaConfig
 import io.github.davidmerrick.cassius.models.StravaAspectType.CREATE
 import io.github.davidmerrick.cassius.models.StravaObjectType.ACTIVITY
 import io.github.davidmerrick.cassius.models.StravaWebhookEvent
+import io.github.davidmerrick.cassius.services.StravaService
 import io.github.davidmerrick.cassius.storage.ActivityStorage
+import io.micronaut.caffeine.cache.Caffeine
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
@@ -16,6 +18,7 @@ import io.micronaut.http.annotation.Post
 import io.micronaut.http.annotation.QueryValue
 import io.micronaut.http.client.exceptions.HttpClientResponseException
 import mu.KotlinLogging
+import java.util.concurrent.TimeUnit
 
 internal const val HUB_MODE = "hub.mode"
 internal const val HUB_CHALLENGE = "hub.challenge"
@@ -25,12 +28,10 @@ private val log = KotlinLogging.logger {}
 
 @Controller("/strava/events")
 class StravaController(
-        private val stravaClient: StravaClient,
-        private val storage: ActivityStorage,
         private val config: StravaConfig,
+        private val service: StravaService,
         private val mapper: ObjectMapper
 ) {
-
     /**
      * When subscribing to webhooks, Strava will do a GET request to the endpoint with
      * challenge params.
@@ -60,14 +61,7 @@ class StravaController(
             return HttpResponse.ok()
         }
 
-        // Fetch activity from Strava
-        val activityId = payload.objectId
-        log.info("Fetching activity $activityId from Strava")
-        val activity = stravaClient.getActivity(activityId)
-
-        // Write activity to bucket
-        log.info("Writing activity payload to bucket")
-        storage.createActivity(payload.objectId, activity)
+        service.processActivity(payload.objectId)
 
         return HttpResponse.ok()
     }
