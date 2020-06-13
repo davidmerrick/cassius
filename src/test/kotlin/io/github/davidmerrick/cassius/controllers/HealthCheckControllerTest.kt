@@ -1,6 +1,6 @@
-package io.github.davidmerrick.strava.controllers
+package io.github.davidmerrick.cassius.controllers
 
-import io.github.davidmerrick.strava.TestApplication
+import io.github.davidmerrick.cassius.TestApplication
 import io.kotlintest.shouldBe
 import io.micronaut.http.client.HttpClient
 import io.micronaut.http.client.annotation.Client

@@ -1,4 +1,4 @@
-package io.github.davidmerrick.strava.clients
+package io.github.davidmerrick.cassius.clients
 
 import io.micronaut.http.client.HttpClient
 import io.micronaut.http.client.annotation.Client

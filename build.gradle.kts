@@ -1,4 +1,4 @@
-group = "io.github.davidmerrick.strava"
+group = "io.github.davidmerrick.cassius"
 
 repositories {
     mavenCentral()
@@ -14,7 +14,7 @@ plugins {
 }
 
 application {
-    mainClassName = "io.github.davidmerrick.strava.Application"
+    mainClassName = "io.github.davidmerrick.cassius.Application"
 }
 
 // Compiler plugin which makes classes with the following
