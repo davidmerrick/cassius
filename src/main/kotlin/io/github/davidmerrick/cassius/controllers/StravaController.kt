@@ -2,12 +2,11 @@ package io.github.davidmerrick.cassius.controllers
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.github.davidmerrick.cassius.clients.StravaClient
 import io.github.davidmerrick.cassius.config.StravaConfig
 import io.github.davidmerrick.cassius.models.StravaAspectType.CREATE
 import io.github.davidmerrick.cassius.models.StravaObjectType.ACTIVITY
 import io.github.davidmerrick.cassius.models.StravaWebhookEvent
-import io.github.davidmerrick.cassius.storage.ActivityStorage
+import io.github.davidmerrick.cassius.services.StravaService
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
@@ -15,6 +14,8 @@ import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Post
 import io.micronaut.http.annotation.QueryValue
 import io.micronaut.http.client.exceptions.HttpClientResponseException
+import io.micronaut.security.annotation.Secured
+import io.micronaut.security.rules.SecurityRule
 import mu.KotlinLogging
 
 internal const val HUB_MODE = "hub.mode"
@@ -23,20 +24,19 @@ internal const val HUB_VERIFY_TOKEN = "hub.verify_token"
 
 private val log = KotlinLogging.logger {}
 
-@Controller("/strava/events")
+@Controller("/strava")
 class StravaController(
-        private val stravaClient: StravaClient,
-        private val storage: ActivityStorage,
         private val config: StravaConfig,
+        private val service: StravaService,
         private val mapper: ObjectMapper
 ) {
-
     /**
      * When subscribing to webhooks, Strava will do a GET request to the endpoint with
      * challenge params.
      * https://developers.strava.com/docs/webhooks/
      */
-    @Get
+    @Secured(SecurityRule.IS_AUTHENTICATED)
+    @Get("/events")
     fun getChallenge(
             @QueryValue(HUB_MODE) hubMode: String,
             @QueryValue(HUB_CHALLENGE) hubChallenge: String,
@@ -51,7 +51,8 @@ class StravaController(
         return ChallengeResponse(hubChallenge)
     }
 
-    @Post
+    @Secured(SecurityRule.IS_ANONYMOUS)
+    @Post("/events")
     fun handleEvent(@Body payload: StravaWebhookEvent): HttpResponse<String> {
         log.debug("Received webhook payload: ${mapper.writeValueAsString(payload)}")
 
@@ -60,17 +61,27 @@ class StravaController(
             return HttpResponse.ok()
         }
 
-        // Fetch activity from Strava
-        val activityId = payload.objectId
-        log.info("Fetching activity $activityId from Strava")
-        val activity = stravaClient.getActivity(activityId)
-
-        // Write activity to bucket
-        log.info("Writing activity payload to bucket")
-        storage.createActivity(payload.objectId, activity)
+        service.processActivity(payload.objectId)
 
         return HttpResponse.ok()
     }
+
+    /**
+     * Endpoint for backfilling activities
+     * Todo: Make this a task queue and have the response be "Accepted"
+     * Secure this before enabling it
+     */
+//    @Secured(SecurityRule.IS_AUTHENTICATED)
+//    @Post("/activities/bulk")
+//    fun bulkAddActivities(@Body activities: List<Long>): HttpResponse<String> {
+//        log.debug("Received ${activities.size} activities")
+//        activities.asSequence()
+//                .forEach {
+//                    service.processActivity(it)
+//                }
+//
+//        return HttpResponse.ok()
+//    }
 }
 
 data class ChallengeResponse(
