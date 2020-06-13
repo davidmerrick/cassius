@@ -4,8 +4,9 @@ micronaut:
 
 strava:
   challengeVerifyToken:
-  client:
-    refreshToken:
+  clientId:
+  clientSecret:
+  refreshToken:
 
 gcp:
   bucketName:

@@ -2,6 +2,7 @@ package io.github.davidmerrick.cassius.controllers
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.davidmerrick.cassius.TestApplication
+import io.github.davidmerrick.cassius.clients.StravaClient
 import io.github.davidmerrick.cassius.storage.ActivityStorage
 import io.kotlintest.fail
 import io.kotlintest.shouldBe
@@ -26,6 +27,9 @@ class StravaControllerTest {
     @get:MockBean(ActivityStorage::class)
     val activityStorage = mockk<ActivityStorage>()
 
+    @get:MockBean(StravaClient::class)
+    val stravaClient = mockk<StravaClient>()
+
     @Inject
     @field:Client("/")
     lateinit var client: HttpClient
@@ -37,6 +41,10 @@ class StravaControllerTest {
         every {
             activityStorage.createActivity(any(), any())
         } just runs
+
+        every {
+            stravaClient.getActivity(any())
+        } returns "hello world"
     }
 
     @Test

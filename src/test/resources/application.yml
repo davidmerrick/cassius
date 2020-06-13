@@ -1,7 +1,8 @@
 strava:
   challengeVerifyToken: banana
-  client:
-    refreshToken:
+  clientId: banana
+  clientSecret: banana
+  refreshToken: banana
 
 gcp:
   bucketName: banana
