@@ -52,7 +52,7 @@ class StravaClient(
         log.info("Retrieving Strava access token")
 
         val request = HttpRequest
-                .POST(AUTH_ENDPOINT, null)
+                .POST(AUTH_ENDPOINT, "")
 
         request.parameters.add("client_id", config.clientId)
                 .add("client_secret", config.clientSecret)
