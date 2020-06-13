@@ -1,4 +1,4 @@
-package io.github.davidmerrick.strava.models
+package io.github.davidmerrick.cassius.models
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

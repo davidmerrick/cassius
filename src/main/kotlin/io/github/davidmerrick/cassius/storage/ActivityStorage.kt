@@ -1,9 +1,9 @@
-package io.github.davidmerrick.strava.storage
+package io.github.davidmerrick.cassius.storage
 
 import com.google.cloud.storage.BlobId
 import com.google.cloud.storage.BlobInfo
 import com.google.cloud.storage.StorageOptions
-import io.github.davidmerrick.strava.config.GoogleCloudConfig
+import io.github.davidmerrick.cassius.config.GoogleCloudConfig
 import javax.inject.Singleton
 
 

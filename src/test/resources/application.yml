@@ -5,7 +5,3 @@ strava:
 
 gcp:
   bucketName: banana
-
-logger:
-  levels:
-    io.github.davidmerrick.strava: DEBUG

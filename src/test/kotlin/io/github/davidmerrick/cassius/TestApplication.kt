@@ -1,5 +1,6 @@
-package io.github.davidmerrick.strava
+package io.github.davidmerrick.cassius
 
+import io.github.davidmerrick.cassius.Application
 import io.micronaut.runtime.Micronaut
 
 object TestApplication {

@@ -1,4 +1,4 @@
-package io.github.davidmerrick.strava.config
+package io.github.davidmerrick.cassius.config
 
 import io.micronaut.context.annotation.ConfigurationProperties
 import javax.validation.constraints.NotBlank

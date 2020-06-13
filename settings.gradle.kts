@@ -1,1 +1,1 @@
-rootProject.name = "strava"
+rootProject.name = "cassius"

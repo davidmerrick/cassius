@@ -1,8 +1,8 @@
-package io.github.davidmerrick.strava.controllers
+package io.github.davidmerrick.cassius.controllers
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.github.davidmerrick.strava.TestApplication
-import io.github.davidmerrick.strava.storage.ActivityStorage
+import io.github.davidmerrick.cassius.TestApplication
+import io.github.davidmerrick.cassius.storage.ActivityStorage
 import io.kotlintest.fail
 import io.kotlintest.shouldBe
 import io.micronaut.http.HttpRequest
@@ -48,7 +48,7 @@ class StravaControllerTest {
 
         try {
             client.toBlocking().retrieve(request, HttpStatus::class.java)
-        } catch (e: HttpClientResponseException){
+        } catch (e: HttpClientResponseException) {
             return
         }
         fail("Should have thrown HttpClientResponseException")
@@ -67,7 +67,27 @@ class StravaControllerTest {
     }
 
     @Test
-    fun `Post a valid webhook event should return 200`() {
+    fun `Post update event should return 200`() {
+        val payload = mapOf(
+                "aspect_type" to "update",
+                "event_time" to "1549560669",
+                "object_id" to "0000000000",
+                "object_type" to "activity",
+                "owner_id" to "9999999",
+                "subscription_id" to "999999",
+                "updates" to mapOf("title" to "Messy")
+        )
+        val request = HttpRequest.POST(
+                EVENTS_ENDPOINT,
+                mapper.writeValueAsString(payload)
+        )
+
+        val status = client.toBlocking().retrieve(request, HttpStatus::class.java)
+        status shouldBe HttpStatus.OK
+    }
+
+    @Test
+    fun `Post create event should return 200`() {
         val payload = mapOf(
                 "aspect_type" to "create",
                 "event_time" to "1549560669",

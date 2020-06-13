@@ -1,13 +1,13 @@
-package io.github.davidmerrick.strava.controllers
+package io.github.davidmerrick.cassius.controllers
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.github.davidmerrick.strava.clients.StravaClient
-import io.github.davidmerrick.strava.config.StravaConfig
-import io.github.davidmerrick.strava.models.StravaAspectType.CREATE
-import io.github.davidmerrick.strava.models.StravaObjectType.ACTIVITY
-import io.github.davidmerrick.strava.models.StravaWebhookEvent
-import io.github.davidmerrick.strava.storage.ActivityStorage
+import io.github.davidmerrick.cassius.clients.StravaClient
+import io.github.davidmerrick.cassius.config.StravaConfig
+import io.github.davidmerrick.cassius.models.StravaAspectType.CREATE
+import io.github.davidmerrick.cassius.models.StravaObjectType.ACTIVITY
+import io.github.davidmerrick.cassius.models.StravaWebhookEvent
+import io.github.davidmerrick.cassius.storage.ActivityStorage
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
