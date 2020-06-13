@@ -44,7 +44,7 @@ class StravaController(
     ): ChallengeResponse {
         log.info("Received Strava challenge: $hubChallenge")
         config.challengeVerifyToken?.let {
-            if(hubVerifyToken != it){
+            if (hubVerifyToken != it) {
                 throw HttpClientResponseException("Invalid $HUB_VERIFY_TOKEN value", HttpResponse.badRequest<String>())
             }
         }
@@ -61,8 +61,9 @@ class StravaController(
         }
 
         // Fetch activity from Strava
-        log.info("Fetching activity from Strava")
-        val activity = stravaClient.getActivity(payload.objectId)
+        val activityId = payload.objectId
+        log.info("Fetching activity $activityId from Strava")
+        val activity = stravaClient.getActivity(activityId)
 
         // Write activity to bucket
         log.info("Writing activity payload to bucket")
