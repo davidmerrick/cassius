@@ -15,12 +15,22 @@ Cassius is a data pipeline that fetches new activities from Strava
 and stores them in Google Cloud Storage so they can be analyzed 
 with BigQuery and Data Studio.
 
+![Data flow](docs/img/dataflow.png)
+
 # Usage
 
 Create a Strava app. You'll need a token with the `activity:read_all` scope.
 
 Have your app subscribe to Strava's webhooks to get notified when a new activity
 is created.
+
+## Importing your data into BigQuery
+
+Import files from your bucket as newline-delimited JSON. 
+Name the table "activities".
+Select "Auto detect" for schema detection.
+
+![GCP Import](docs/img/gcp_import.png)
 
 # Reference
 

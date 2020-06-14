@@ -65,23 +65,6 @@ class StravaController(
 
         return HttpResponse.ok()
     }
-
-    /**
-     * Endpoint for backfilling activities
-     * Todo: Make this a task queue and have the response be "Accepted"
-     * Secure this before enabling it
-     */
-//    @Secured(SecurityRule.IS_AUTHENTICATED)
-//    @Post("/activities/bulk")
-//    fun bulkAddActivities(@Body activities: List<Long>): HttpResponse<String> {
-//        log.debug("Received ${activities.size} activities")
-//        activities.asSequence()
-//                .forEach {
-//                    service.processActivity(it)
-//                }
-//
-//        return HttpResponse.ok()
-//    }
 }
 
 data class ChallengeResponse(

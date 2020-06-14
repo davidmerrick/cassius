@@ -119,23 +119,4 @@ class StravaControllerTest {
         val status = client.toBlocking().retrieve(request, HttpStatus::class.java)
         status shouldBe HttpStatus.OK
     }
-
-    @Test
-    // Todo: Disabled until this endpoint is secured
-    @Disabled
-    fun `Backfill activities`() {
-        val payload = listOf(
-                12345L,
-                99999L
-        )
-        val request = HttpRequest.POST(
-                BACKFILL_ENDPOINT,
-                mapper.writeValueAsString(payload)
-        )
-
-        val status = client.toBlocking().retrieve(request, HttpStatus::class.java)
-        status shouldBe HttpStatus.OK
-
-        verify(exactly = 2) { stravaClient.getActivity(any()) }
-    }
 }
