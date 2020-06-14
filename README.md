@@ -28,7 +28,8 @@ is created.
 
 Import files from your bucket as newline-delimited JSON. 
 Name the table "activities".
-Select "Auto detect" for schema detection.
+Copy the included [schema.json](docs/schema.json) for the schema.
+Under `Advanced`, select "Ignore unknown fields".
 
 ![GCP Import](docs/img/gcp_import.png)
 
