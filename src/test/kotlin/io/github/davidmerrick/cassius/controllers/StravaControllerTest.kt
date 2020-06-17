@@ -18,10 +18,9 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
-import io.mockk.verify
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import javax.inject.Inject
 
 private const val EVENTS_ENDPOINT = "/strava/events"
@@ -118,5 +117,21 @@ class StravaControllerTest {
 
         val status = client.toBlocking().retrieve(request, HttpStatus::class.java)
         status shouldBe HttpStatus.OK
+    }
+
+    @Test
+    fun `Bulk activities endpoint should be authenticated`() {
+        val payload = listOf(12345L, 99999L)
+
+        val request = HttpRequest.POST(
+                BACKFILL_ENDPOINT,
+                mapper.writeValueAsString(payload)
+        )
+
+        val exception = assertThrows<HttpClientResponseException> {
+            client.toBlocking().retrieve(request, HttpStatus::class.java)
+        }
+
+        exception.message!!.contains("Unauthorized", true) shouldBe true
     }
 }

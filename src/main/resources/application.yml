@@ -1,6 +1,18 @@
 micronaut:
   application:
-    name: strava
+    name: cassius
+  security:
+    enabled: true
+    oauth2:
+      enabled: true
+      clients:
+        auth0:
+          client-id:
+          client-secret:
+    endpoints:
+      logout:
+        enabled: true
+        get-allowed: true
 
 strava:
   challengeVerifyToken:

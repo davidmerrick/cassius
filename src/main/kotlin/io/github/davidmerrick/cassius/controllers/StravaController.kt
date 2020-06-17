@@ -35,8 +35,8 @@ class StravaController(
      * challenge params.
      * https://developers.strava.com/docs/webhooks/
      */
-    @Secured(SecurityRule.IS_AUTHENTICATED)
     @Get("/events")
+    @Secured(SecurityRule.IS_ANONYMOUS)
     fun getChallenge(
             @QueryValue(HUB_MODE) hubMode: String,
             @QueryValue(HUB_CHALLENGE) hubChallenge: String,
@@ -51,8 +51,8 @@ class StravaController(
         return ChallengeResponse(hubChallenge)
     }
 
-    @Secured(SecurityRule.IS_ANONYMOUS)
     @Post("/events")
+    @Secured(SecurityRule.IS_ANONYMOUS)
     fun handleEvent(@Body payload: StravaWebhookEvent): HttpResponse<String> {
         log.debug("Received webhook payload: ${mapper.writeValueAsString(payload)}")
 
@@ -62,6 +62,17 @@ class StravaController(
         }
 
         service.processActivity(payload.objectId)
+
+        return HttpResponse.ok()
+    }
+
+    /**
+     * Backfill endpoint for posting a list of activity ids
+     */
+    @Post("/activities/bulk")
+    fun handleEvent(@Body activities: List<Long>): HttpResponse<String> {
+        log.info("Handling bulk activities of size ${activities.size}")
+        activities.forEach { service.processActivity(it) }
 
         return HttpResponse.ok()
     }
