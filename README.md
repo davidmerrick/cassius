@@ -33,7 +33,13 @@ Under `Advanced`, select "Ignore unknown fields".
 
 ![GCP Import](docs/img/gcp_import.png)
 
+# Auth
+
+There's an activities backfill endpoint that I've secured with [auth0](https://auth0.com/).
+To add your own auth, configure the `security` section of `application.yml`.
+
 # Reference
 
 - [Strava API docs](https://developers.strava.com/docs/getting-started/)
 - [Subscribing to webhooks](https://developers.strava.com/docs/webhooks/)
+- [Micronaut API with JWT authentication](https://www.ivarprudnikov.com/micronaut-kotlin-jwt-secured-api-aws-lambda/)

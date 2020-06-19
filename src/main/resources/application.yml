@@ -1,6 +1,15 @@
 micronaut:
   application:
-    name: strava
+    name: cassius
+  security:
+    enabled: true
+    token:
+      jwt:
+        enabled: true
+        signatures:
+          jwks:
+            auth0:
+              url: https://merricklabs.us.auth0.com/.well-known/jwks.json
 
 strava:
   challengeVerifyToken:

@@ -18,9 +18,9 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
+import io.mockk.slot
 import io.mockk.verify
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import javax.inject.Inject
 
@@ -118,5 +118,18 @@ class StravaControllerTest {
 
         val status = client.toBlocking().retrieve(request, HttpStatus::class.java)
         status shouldBe HttpStatus.OK
+    }
+
+    @Test
+    fun `Bulk activities endpoint should store multiple activities`() {
+        val payload = listOf(12345L, 99999L)
+
+        val request = HttpRequest.POST(
+                BACKFILL_ENDPOINT,
+                mapper.writeValueAsString(payload)
+        )
+
+        client.toBlocking().retrieve(request, HttpStatus::class.java)
+        verify(exactly = 2) { stravaClient.getActivity(any()) }
     }
 }
