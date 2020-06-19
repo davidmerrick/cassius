@@ -25,6 +25,7 @@ internal const val HUB_VERIFY_TOKEN = "hub.verify_token"
 private val log = KotlinLogging.logger {}
 
 @Controller("/strava")
+@Secured(SecurityRule.IS_ANONYMOUS)
 class StravaController(
         private val config: StravaConfig,
         private val service: StravaService,
@@ -36,7 +37,6 @@ class StravaController(
      * https://developers.strava.com/docs/webhooks/
      */
     @Get("/events")
-    @Secured(SecurityRule.IS_ANONYMOUS)
     fun getChallenge(
             @QueryValue(HUB_MODE) hubMode: String,
             @QueryValue(HUB_CHALLENGE) hubChallenge: String,
@@ -52,7 +52,6 @@ class StravaController(
     }
 
     @Post("/events")
-    @Secured(SecurityRule.IS_ANONYMOUS)
     fun handleEvent(@Body payload: StravaWebhookEvent): HttpResponse<String> {
         log.debug("Received webhook payload: ${mapper.writeValueAsString(payload)}")
 
@@ -69,6 +68,8 @@ class StravaController(
     /**
      * Backfill endpoint for posting a list of activity ids
      */
+    // Todo: Secure this with oAuth scopes once that's supported
+    @Secured(SecurityRule.IS_AUTHENTICATED)
     @Post("/activities/bulk")
     fun handleEvent(@Body activities: List<Long>): HttpResponse<String> {
         log.info("Handling bulk activities of size ${activities.size}")

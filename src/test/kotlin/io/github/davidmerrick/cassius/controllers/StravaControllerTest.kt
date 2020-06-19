@@ -18,9 +18,10 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
+import io.mockk.slot
+import io.mockk.verify
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import javax.inject.Inject
 
 private const val EVENTS_ENDPOINT = "/strava/events"
@@ -120,7 +121,7 @@ class StravaControllerTest {
     }
 
     @Test
-    fun `Bulk activities endpoint should be authenticated`() {
+    fun `Bulk activities endpoint should store multiple activities`() {
         val payload = listOf(12345L, 99999L)
 
         val request = HttpRequest.POST(
@@ -128,10 +129,7 @@ class StravaControllerTest {
                 mapper.writeValueAsString(payload)
         )
 
-        val exception = assertThrows<HttpClientResponseException> {
-            client.toBlocking().retrieve(request, HttpStatus::class.java)
-        }
-
-        exception.message!!.contains("Unauthorized", true) shouldBe true
+        client.toBlocking().retrieve(request, HttpStatus::class.java)
+        verify(exactly = 2) { stravaClient.getActivity(any()) }
     }
 }

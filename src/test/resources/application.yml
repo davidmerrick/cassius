@@ -2,7 +2,7 @@ micronaut:
   application:
     name: cassius
   security:
-    enabled: true
+    enabled: false
 
 endpoints:
   all:

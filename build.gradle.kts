@@ -36,7 +36,6 @@ dependencies {
     kapt("io.micronaut:micronaut-security")
 
     implementation(platform("io.micronaut:micronaut-bom:$micronautVersion"))
-    implementation("io.micronaut.configuration:micronaut-security-oauth2")
     implementation("io.micronaut:micronaut-security-jwt")
     implementation("io.micronaut:micronaut-runtime")
     implementation("io.micronaut:micronaut-inject")
