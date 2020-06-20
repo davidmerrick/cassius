@@ -36,15 +36,12 @@ class StravaService(
         }
 
         // Fetch activity from Strava
-        log.info("Fetching activity $activityId from Strava")
         val activity = client.getActivity(activityId)
 
         // Write activity to bucket
-        log.info("Writing activity payload to bucket")
         storage.createActivity(activityId, activity)
 
         // Load activity
-        log.info("Loading activity into data warehouse")
         activityLoader.loadActivity(activityId)
     }
 }

@@ -21,7 +21,7 @@ gcp:
   bucketName:
 
 bigQuery:
-  datasetName: cassius
+  datasetName: strava_bigquery
   tableName: activities
 
 endpoints:

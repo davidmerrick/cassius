@@ -33,8 +33,14 @@ class ActivityLoader(
         log.info("Loading $activityId into BigQuery")
 
         val sourceUri = "gs://${googleCloudConfig.bucketName}/$activityId.json"
-        client.getTable(bigQueryConfig.datasetName, bigQueryConfig.tableName)
-                .load(FormatOptions.json(), sourceUri)
+        try {
+            val jobFuture = client.getTable(bigQueryConfig.datasetName, bigQueryConfig.tableName)
+                    .load(FormatOptions.json(), sourceUri)
+            log.info("Created job with id ${jobFuture.jobId}")
+        } catch(e: Exception){
+            // Log and continue
+            log.error("Exception thrown while loading activity $activityId into BigQuery", e)
+        }
     }
 
 }
