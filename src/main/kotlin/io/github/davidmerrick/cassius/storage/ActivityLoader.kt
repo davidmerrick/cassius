@@ -2,6 +2,9 @@ package io.github.davidmerrick.cassius.storage
 
 import com.google.cloud.bigquery.BigQueryOptions
 import com.google.cloud.bigquery.FormatOptions
+import com.google.cloud.bigquery.JobInfo
+import com.google.cloud.bigquery.LoadJobConfiguration
+import com.google.cloud.bigquery.TableId
 import io.github.davidmerrick.cassius.config.BigQueryConfig
 import io.github.davidmerrick.cassius.config.GoogleCloudConfig
 import mu.KotlinLogging
@@ -34,10 +37,17 @@ class ActivityLoader(
 
         val sourceUri = "gs://${googleCloudConfig.bucketName}/$activityId.json"
         try {
-            val jobFuture = client.getTable(bigQueryConfig.datasetName, bigQueryConfig.tableName)
-                    .load(FormatOptions.json(), sourceUri)
+            val activitiesTable = TableId
+                    .of(bigQueryConfig.datasetName, bigQueryConfig.tableName)
+            
+            val jobConfig = LoadJobConfiguration.builder(activitiesTable, sourceUri)
+                    .setFormatOptions(FormatOptions.json())
+                    .setIgnoreUnknownValues(true)
+                    .build()
+
+            val jobFuture = client.create(JobInfo.of(jobConfig))
             log.info("Created job with id ${jobFuture.jobId}")
-        } catch(e: Exception){
+        } catch (e: Exception) {
             // Log and continue
             log.error("Exception thrown while loading activity $activityId into BigQuery", e)
         }
