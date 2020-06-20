@@ -20,6 +20,10 @@ strava:
 gcp:
   bucketName:
 
+bigQuery:
+  datasetName: cassius
+  tableName: activities
+
 endpoints:
   all:
     enabled: false

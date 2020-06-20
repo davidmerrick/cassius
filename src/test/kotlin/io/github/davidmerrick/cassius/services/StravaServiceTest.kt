@@ -2,6 +2,7 @@ package io.github.davidmerrick.cassius.services
 
 import io.github.davidmerrick.cassius.TestApplication
 import io.github.davidmerrick.cassius.clients.StravaClient
+import io.github.davidmerrick.cassius.storage.ActivityLoader
 import io.github.davidmerrick.cassius.storage.ActivityStorage
 import io.kotlintest.shouldBe
 import io.micronaut.test.annotation.MicronautTest
@@ -24,6 +25,9 @@ class StravaServiceTest {
     @get:MockBean(StravaClient::class)
     val stravaClient = mockk<StravaClient>()
 
+    @get:MockBean(ActivityLoader::class)
+    val activityLoader = mockk<ActivityLoader>()
+
     @get:MockBean(ActivityStorage::class)
     val activityStorage = mockk<ActivityStorage>()
 
@@ -40,6 +44,10 @@ class StravaServiceTest {
 
         every {
             activityStorage.createActivity(any(), any())
+        } just runs
+
+        every {
+            activityLoader.loadActivity(any())
         } just runs
     }
 
