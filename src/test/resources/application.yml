@@ -25,4 +25,8 @@ strava:
   refreshToken: banana
 
 gcp:
-  bucketName: banana
+  bucketName: cassius
+
+bigQuery:
+  datasetName: cassius
+  tableName: activities
