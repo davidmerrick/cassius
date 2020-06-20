@@ -11,4 +11,6 @@ class BigQueryConfig {
 
     @get:NotBlank
     lateinit var datasetName: String
+
+    var projectId: String? = null
 }

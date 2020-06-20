@@ -28,5 +28,6 @@ gcp:
   bucketName: cassius
 
 bigQuery:
+  projectId: foo
   datasetName: cassius
   tableName: activities

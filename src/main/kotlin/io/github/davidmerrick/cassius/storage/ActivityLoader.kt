@@ -14,9 +14,17 @@ class ActivityLoader(
         private val bigQueryConfig: BigQueryConfig,
         private val googleCloudConfig: GoogleCloudConfig
 ) {
-    private val client = BigQueryOptions
-            .getDefaultInstance()
-            .service
+    private val client by lazy {
+        val builder = BigQueryOptions
+                .getDefaultInstance()
+                .toBuilder()
+
+        bigQueryConfig.projectId?.let {
+            builder.setProjectId(it)
+        }
+
+        builder.build().service
+    }
 
     /**
      * Loads activity into BigQuery
